@@ -1,0 +1,17 @@
+{
+  "name": "batalha-de-estrelas",
+  "version": "1.0.0",
+  "description": "A Batalha de Estrelas contada sem as regioes: a menor grade com k estrelas e 4k x 4k e tem 2 arranjos, e o 10 x 10 de jornal tem 146.510",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test testes/*.test.js",
+    "medir": "node ferramentas/medidor.js"
+  },
+  "license": "MIT",
+  "private": false
+}
