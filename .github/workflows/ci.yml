@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    name: testes (${{ matrix.os }}, node ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ['20', '22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # `shell: bash` nao e enfeite: no PowerShell do runner o glob chega ao
+      # node como texto literal e ele procura um arquivo com asterisco no nome.
+      - name: "o nucleo, o juiz e os numeros do README"
+        shell: bash
+        run: node --test testes/nucleo.test.js testes/juiz.test.js testes/medidas.test.js
+      - name: "as varreduras caras"
+        shell: bash
+        run: node --test testes/pesados.test.js
+
+  medidas:
+    name: tabelas do README
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: "uma estrela ate 16 x 16"
+        run: node ferramentas/medidor.js uma 16
+      - name: "duas estrelas"
+        run: node ferramentas/medidor.js duas
+      - name: "tres estrelas"
+        run: node ferramentas/medidor.js tres
+      - name: "as menores grades"
+        run: node ferramentas/medidor.js menor
+      - name: "classes do 10 x 10 com duas"
+        run: node ferramentas/medidor.js simetria 10 2
+      - name: "forca bruta contra a programacao dinamica"
+        run: node ferramentas/medidor.js juiz
